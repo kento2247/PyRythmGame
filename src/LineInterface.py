@@ -10,7 +10,7 @@ from GasRequest import GasRequest
 
 
 class LineInterface:
-    def __init__(self):
+    def __init__(self) -> None:
         load_dotenv()
         self.width = int(os.getenv("screen_width"))
         self.height = int(os.getenv("screen_height"))
@@ -20,7 +20,7 @@ class LineInterface:
         self.gas_request = GasRequest()
         self.timeout = 30  # sec
 
-    def _login_screen(self, pincode):
+    def _login_screen(self, pincode) -> None:
         pygame.display.set_caption("login_qr")
         qrcode = pygame.image.load(self.qr_path)
         qrcode_size = self.height * 5 // 9
@@ -61,7 +61,7 @@ class LineInterface:
 
         pygame.display.update()
 
-    def _logined_screen(self, user_name):
+    def _logined_screen(self, user_name) -> None:
         pygame.display.set_caption("welcome")
         font_size = self.height // 12
         text_font = pygame.font.Font(self.font_path, font_size)
@@ -88,7 +88,7 @@ class LineInterface:
         pygame.display.update()
         self._wait_input()
 
-    def _logout_screen(self):
+    def _logout_screen(self) -> None:
         pygame.display.set_caption("logout")
         self.screen.fill((0, 0, 0))
         message_1 = "ログアウト処理中"
@@ -99,7 +99,7 @@ class LineInterface:
         self.screen.blit(text, ((self.width - w) // 2, (self.height - h) // 2))
         pygame.display.update()
 
-    def _logged_out_screen(self):
+    def _logged_out_screen(self) -> None:
         pygame.display.set_caption("logout successfull")
         self.screen.fill((0, 0, 0))
         message = "ログアウト完了"
@@ -119,16 +119,16 @@ class LineInterface:
         pygame.display.update()  # 画面を更新
         self._wait_input()
 
-    def _wait_input(self):
+    def _wait_input(self) -> None:
         start_time = time.time()
         while time.time() - start_time < self.timeout:
             if self._get_input():
-                return
+                return None
             time.sleep(0.01)
         print("timeout")
         self._force_quit()
 
-    def _get_input(self):
+    def _get_input(self) -> int:
         for event in pygame.event.get():
             if event.type == QUIT:
                 self._force_quit()
@@ -137,9 +137,9 @@ class LineInterface:
                     self._force_quit()
                 else:
                     return event.key
-        return False
+        return -1
 
-    def _wait_login(self, original_pincode):
+    def _wait_login(self, original_pincode) -> list:
         start_time = time.time()
         while time.time() - start_time < self.timeout:
             now_pincode = self.gas_request.get_pincode()
@@ -150,21 +150,21 @@ class LineInterface:
             time.sleep(0.01)
         self._force_quit()
 
-    def login(self):
+    def login(self) -> list:
         pincode = self.gas_request.new_pincode()
         self._login_screen(pincode)
         userId, userName = self._wait_login(pincode)
         self._logined_screen(userName)
         return [userId, userName]
 
-    def logout(self, userId, message):
+    def logout(self, userId, message) -> None:
         self._logout_screen()
         self.gas_request.send_line(userId, message)
         self.gas_request.del_pincode()
         self._logged_out_screen()
         self.login()
 
-    def _force_quit(self):
+    def _force_quit(self) -> None:
         pygame.quit()
         self.gas_request.del_pincode()
         sys.exit()

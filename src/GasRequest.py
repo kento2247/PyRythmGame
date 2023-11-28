@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 
 class GasRequest:
-    def __init__(self):
+    def __init__(self) -> None:
         load_dotenv()
         self.gas_url = os.getenv("gas_url")
 
@@ -71,5 +71,5 @@ class GasRequest:
             print("line send error")
             return False
 
-    def _force_quit(self):
+    def _force_quit(self) -> None:
         sys.exit()

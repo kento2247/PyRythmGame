@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 
 class MusicData:
-    def __init__(self):
+    def __init__(self) -> None:
         load_dotenv()
         self.folder_path = os.getenv("folder_path")
         self.music_list = [
@@ -19,10 +19,10 @@ class MusicData:
             ["Catch the Moment", "Catch the Moment"],
         ]
 
-    def get_music_list(self):
+    def get_music_list(self) -> list:
         return self.music_list
 
-    def get_notes_array(self, music_title):
+    def get_notes_array(self, music_title) -> list:
         try:
             for i in self.music_list:
                 if music_title in i[0]:
@@ -34,7 +34,7 @@ class MusicData:
             print(e)
             return False
 
-    def _csv_to_list(self, file_path):
+    def _csv_to_list(self, file_path) -> list:
         return_list = []
         try:
             with open(file_path) as file_name:
