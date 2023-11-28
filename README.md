@@ -1,5 +1,6 @@
+##.env ファイルの設定
 
-
+```sh
 gas_url=https://script.google.com/macros/s/??????????/exec
 
 # Google Apps Script へアクセスするための URL（自己設定）
@@ -32,3 +33,4 @@ led_pin=12
 switch_pin=16
 
 # スイッチを接続するピン。BOARD 番号
+```
