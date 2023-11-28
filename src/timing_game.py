@@ -68,29 +68,6 @@ def timing_game(UserName):
     return game_result
 
 
-def control_switch(mode):
-    return
-    # mode = 0: init
-    # mode = -1: end
-    # mode = 1: get
-    if mode == 0:
-        return raspi_switch.raspi_switch_init()
-    elif mode == -1:
-        return raspi_switch.raspi_gpio_end()
-    elif mode == 1:
-        return raspi_switch.get_switch_fall()
-    else:
-        print("control_switch function error")
-        return -1
-
-
-def game_init(param):
-    param_init()
-    # pygame.init()
-    audio_init()
-    screen_init()
-
-
 def param_init():
     global notes_array
     global game_life
@@ -132,7 +109,6 @@ def screen_init():
     global topbar_font_size
     global circle_size
     global judge_circle
-    # screen = pygame.display.set_mode((default_width, default_height), FULLSCREEN)
     screen = pygame.display.set_mode((default_width, default_height))
     width = pygame.display.get_surface().get_width()
     height = pygame.display.get_surface().get_height()
@@ -143,8 +119,6 @@ def screen_init():
     judge_circle = pygame.Rect(
         width - circle_size * 2, (height - topbar_height) / 2, circle_size, circle_size
     )  # creates a rect object
-    # width = default_width
-    # height = default_height
 
 
 def draw_stage(music_jp_title, passed_time):
@@ -325,8 +299,9 @@ def central_control():
         return game_end()
     music_title = music_list[track_num][0]
     music_jp_title = music_list[track_num][1]
-    param = []
-    game_init(param)  # Pygameを初期化
+    param_init()
+    audio_init()
+    screen_init()
     game_start(music_title, music_jp_title)
     return central_control()
 
@@ -335,9 +310,7 @@ def game_start(music_title, music_jp_title):
     count_down(3)
     pygame.mixer.music.load(folder_path + "/mp3/" + music_title + ".mp3")  # 音楽ファイルの読み込み
     pygame.mixer.music.set_volume(music_volume)  # 音楽の再生回数(1回)
-    control_switch(0)
     play_game(music_title, music_jp_title)
-    control_switch(-1)
 
 
 def count_down(start_num):
@@ -382,8 +355,6 @@ def play_game(music_title, music_jp_title):
                 global game_result
                 game_result = [music_jp_title, max_combo, game_score]
             return
-        if control_switch(1):
-            notes_judge(passed_time)
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if home_button.collidepoint(event.pos):
@@ -616,8 +587,6 @@ def home_menu():
                     if i.collidepoint(event.pos):
                         top_button_pos.reverse()
                         button_pos_index = top_button_pos.index(i)
-                        # print(f"{event.pos}>>range {i}")
-                        # print(f"{i.collidepoint(event.pos)}, {button_pos_index}")
                         if topbar_list[button_pos_index][0] == 0:  # 強制ホーム
                             print("home")
                             return [0, "move", 0]
@@ -626,7 +595,6 @@ def home_menu():
 
 
 def setting_menu():
-    # game_end()
     scene_id = 1
     font_size = height // 15
     rect_marge = [width // 80, height // 450]
@@ -789,8 +757,6 @@ def move_scene(scene_id):
         return home_menu()
     elif scene_id == 1:
         return setting_menu()
-    # elif scene_id == 2:
-    #     return force_quit()
     else:
         return home_menu()
 

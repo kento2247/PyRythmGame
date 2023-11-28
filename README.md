@@ -25,12 +25,4 @@ qr_path=${folder_path}/linebot_qr.png
 font_path=${folder_path}/ipaexg00401/ipaexg.ttf
 
 # 日本語フォントが置かれているパス名
-
-led_pin=12
-
-# LED を接続するピン。BOARD 番号
-
-switch_pin=16
-
-# スイッチを接続するピン。BOARD 番号
 ```
