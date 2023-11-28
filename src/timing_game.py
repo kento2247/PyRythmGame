@@ -6,12 +6,9 @@ import pygame
 from dotenv import load_dotenv
 from pygame.locals import *
 
-import music_info
+from MusicData import MusicData
 
-# import raspi_switch
-load_dotenv()
-folder_path = os.getenv("folder_path")
-JP_FONT_PATH = os.getenv("font_path")
+music_data = MusicData()
 
 autoplay = 0
 generate_speed = 1500
@@ -54,19 +51,18 @@ userName = ""
 game_result = ["", 0, 0]  # combo,score
 
 
-def timing_game(Folder_path, font_path, UserName, width, height):
+def timing_game(UserName):
     global folder_path
     global JP_FONT_PATH
     global userName
     global default_width
     global default_height
-    folder_path, JP_FONT_PATH, userName, default_width, default_height = (
-        Folder_path,
-        font_path,
-        UserName,
-        width,
-        height,
-    )
+    load_dotenv()
+    folder_path = os.getenv("folder_path")
+    JP_FONT_PATH = os.getenv("font_path")
+    userName = UserName
+    default_width = int(os.getenv("screen_width"))
+    default_height = int(os.getenv("screen_height"))
     screen_init()
     central_control()
     return game_result
@@ -308,7 +304,7 @@ def set_topbar(topbar_list):
 
 
 def central_control():
-    music_list = music_info.music_list
+    music_list = music_data.music_list
     page_num = 0
     while 1:
         menu_input = move_scene(page_num)
@@ -363,7 +359,7 @@ def count_down(start_num):
 
 def play_game(music_title, music_jp_title):
     global target_array
-    target_array = music_info.get_notes_array(music_title)
+    target_array = music_data.get_notes_array(music_title)
     end_time = target_array[-1]
     base_time = time.time() * 1000
     music_start_flag = 0
@@ -560,7 +556,7 @@ def game_end():
 
 
 def home_menu():
-    music_list = music_info.music_list
+    music_list = music_data.music_list
     scene_id = 0
     font_size = height // 15
     text_x_marge = width // 200
