@@ -50,6 +50,8 @@ judge_circle = ""
 userName = ""
 game_result = ["", 0, 0]  # combo,score
 
+# class TimingGame
+
 
 def timing_game(UserName):
     global folder_path
